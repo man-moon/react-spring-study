@@ -59,4 +59,13 @@ public class MusicService {
             return 0;
         }
     }
+
+    public String deleteFavorite(String id) {
+        try {
+            albumsRepo.deleteById(id);
+            return "Delete completed";
+        } catch (Exception e) {
+            return "Not in Favorite Music";
+        }
+    }
 }

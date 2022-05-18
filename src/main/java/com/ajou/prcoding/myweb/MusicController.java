@@ -39,4 +39,9 @@ public class MusicController {
     public int postLikes(@RequestBody FavoriteMusicRequestDto favorite) {
         return service.saveFavorite(favorite);
     }
+
+    @DeleteMapping(value = "/likes/{id}")
+    public String musicDeleteByPath(@PathVariable String id) {
+        return service.deleteFavorite(id);
+    }
 }
