@@ -48,10 +48,11 @@ public class MusicController {
             ObjectMapper mapper = new ObjectMapper();
             list = mapper.readValue(response, MusicList.class);
             System.out.println(list.getResultCount());
+            return list;
 
         } catch(IOException e) {
             System.out.println(e.toString());
+            return null;
         }
-        return list;
     }
 }
