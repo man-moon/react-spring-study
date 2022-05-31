@@ -1,6 +1,7 @@
 package com.ajou.prcoding.myweb;
 
 import com.ajou.prcoding.myweb.dto.FavoriteMusicRequestDto;
+import com.ajou.prcoding.myweb.dto.Music;
 import com.ajou.prcoding.myweb.dto.MusicList;
 import com.ajou.prcoding.myweb.entity.FavoriteMusic;
 import com.ajou.prcoding.myweb.repository.FavoriteRepository;
@@ -35,8 +36,21 @@ public class MusicController {
         return service.getLikes();
     }
 
+    @GetMapping(value = "/check/{id}")
+    public int checkMusic(@PathVariable String id) {
+        return service.getCheck(id);
+    }
+
+    @GetMapping(value = "/getMusic/{id}")
+    public Music getMusic(@PathVariable String id) {
+        System.out.println("IN GET MUSIC\n");
+        return service.getMusic(id);
+    }
+
     @PostMapping(value = "/likes")
     public int postLikes(@RequestBody FavoriteMusicRequestDto favorite) {
+        System.out.println("<<<POSTMAPPING>>>\n");
+        System.out.println(favorite);
         return service.saveFavorite(favorite);
     }
 
@@ -44,4 +58,5 @@ public class MusicController {
     public String musicDeleteByPath(@PathVariable String id) {
         return service.deleteFavorite(id);
     }
+
 }

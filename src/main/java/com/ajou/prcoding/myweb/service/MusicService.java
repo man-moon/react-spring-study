@@ -1,11 +1,13 @@
 package com.ajou.prcoding.myweb.service;
 
 import com.ajou.prcoding.myweb.dto.FavoriteMusicRequestDto;
+import com.ajou.prcoding.myweb.dto.Music;
 import com.ajou.prcoding.myweb.dto.MusicList;
 import com.ajou.prcoding.myweb.entity.FavoriteMusic;
 import com.ajou.prcoding.myweb.repository.FavoriteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -61,11 +63,43 @@ public class MusicService {
     }
 
     public String deleteFavorite(String id) {
-        try {
+        if (albumsRepo.findById(id).isPresent()) {
             albumsRepo.deleteById(id);
-            return "Delete completed";
-        } catch (Exception e) {
-            return "Not in Favorite Music";
+            return "Delete Complete";
+        } else {
+            return "Not present";
+        }
+    }
+
+    public Music getMusic(String id) {
+        System.out.println("hello\n");
+        String url = "https://itunes.apple.com/lookup?id=";
+        url += id;
+        url += "&entity=album";
+
+        RestTemplate restTemplate = new RestTemplate();
+        Music m = new Music();
+        try {
+            String response = restTemplate.getForObject(url, String.class);
+            ObjectMapper mapper = new ObjectMapper();
+            m = mapper.readValue(response, Music.class);
+
+        } catch(IOException e) {
+            System.out.println(e.toString());
+        }
+        System.out.println("Music Id: " + m + "\n");
+
+        return m;
+    }
+
+    public int getCheck(String id) {
+        if (albumsRepo.findById(id).isPresent()) {
+            System.out.println("PRESENT\n");
+            return 1;
+        }
+        else {
+            System.out.println("NOT PRESENT\n");
+            return 0;
         }
     }
 }

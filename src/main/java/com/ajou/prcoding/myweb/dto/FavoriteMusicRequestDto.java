@@ -16,6 +16,8 @@ public class FavoriteMusicRequestDto {
     private String artistViewUrl;
     private String collectionName;
     private String collectionViewUrl;
+    private String collectionCensoredName;
+    private String artworkUrl100;
 
     public FavoriteMusic toEntity() {
         FavoriteMusic music = new FavoriteMusic();
@@ -27,6 +29,8 @@ public class FavoriteMusicRequestDto {
         music.setArtistViewUrl(this.artistViewUrl);
         music.setCollectionName(this.collectionName);
         music.setCollectionViewUrl(this.collectionViewUrl);
+        music.setCollectionCensoredName(this.collectionCensoredName);
+        music.setArtworkUrl100(this.artworkUrl100);
 
         return music;
     }

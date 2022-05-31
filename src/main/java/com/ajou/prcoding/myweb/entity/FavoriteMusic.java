@@ -33,4 +33,8 @@ public class FavoriteMusic {
     private String collectionName;
     @Column
     private String collectionViewUrl;
+    @Column
+    private String collectionCensoredName;
+    @Column
+    private String artworkUrl100;
 }
