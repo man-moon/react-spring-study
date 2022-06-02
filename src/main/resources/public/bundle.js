@@ -17480,26 +17480,43 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(MusicList);
 
-  function MusicList(props) {
+  function MusicList() {
     var _this;
 
     _classCallCheck(this, MusicList);
 
-    _this = _super.call(this, props);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      likes: {},
+      snackbar: {}
+    });
 
     _defineProperty(_assertThisInitialized(_this), "toggleFavorite", function (id) {
       return function () {
-        var likes = _this.state.likes; //좋아요 등록
+        var likes = _this.state.likes;
+        console.log(likes);
+        if (likes[id] == undefined) likes[id] = true;else likes[id] = !likes[id];
+        console.log(likes); //this.forceUpdate();
+
+        _this.setState({
+          likes: likes
+        }); //좋아요 등록
+
 
         fetch("http://localhost:80/check/".concat(id)).then(function (r) {
           return r.json();
         }).then(function (r) {
           if (r == 0) {
-            likes[id] = true;
+            //likes[id] = true;
             fetch("http://localhost:80/getMusic/".concat(id)).then(function (r) {
               return r.json();
             }).then(function (r) {
-              console.log(r);
+              //console.log(r);
               fetch("http://localhost:80/likes", {
                 method: "POST",
                 headers: {
@@ -17521,7 +17538,7 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
               });
             });
           } else if (r == 1) {
-            likes[id] = false;
+            //likes[id] = false;
             fetch("http://localhost:80/likes/".concat(id), {
               method: "DELETE"
             }).then(function (r) {
@@ -17531,7 +17548,6 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
         });
 
         _this.setState({
-          likes: likes,
           snackbar: {
             open: true,
             msg: "id ".concat(id, " clicked")
@@ -17553,17 +17569,33 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
       });
     });
 
-    _this.state = {
-      likes: {},
-      snackbar: {}
-    };
     return _this;
   }
 
   _createClass(MusicList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var likes = this.state.likes;
+      fetch("http://localhost:80/likes").then(function (r) {
+        return r.json();
+      }).then(function (r) {
+        for (var i = 0; i < r.length; i++) {
+          likes[r[i].collectionId] = true;
+        }
+
+        _this2.setState({
+          likes: likes
+        });
+      })["catch"](function (e) {
+        return console.log(e);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var classes = this.props.classes;
       var results = this.props.list["results"];
@@ -17572,7 +17604,7 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["default"], {
           key: item.collectionId,
           className: classes.card
-        }, console.log(item.collectionId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_4__["default"], {
           variant: "subtitle1"
         }, " ", item.artistName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_4__["default"], {
           variant: "subtitle2"
@@ -17580,8 +17612,8 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
           src: results[++idx]["artworkUrl100"],
           alt: results[idx]["collectionName"]
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["default"], {
-          onClick: _this2.toggleFavorite(item.collectionId)
-        }, _this2.state.likes[item.collectionId] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_7__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_8__["default"], null))));
+          onClick: _this3.toggleFavorite(item.collectionId)
+        }, _this3.state.likes[item.collectionId] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_7__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_8__["default"], null))));
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_snackmsg__WEBPACK_IMPORTED_MODULE_1__["default"], {
         open: this.state.snackbar.open,
         message: this.state.snackbar.msg,
