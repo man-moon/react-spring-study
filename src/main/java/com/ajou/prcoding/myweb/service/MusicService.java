@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -101,5 +102,9 @@ public class MusicService {
             System.out.println("NOT PRESENT\n");
             return 0;
         }
+    }
+
+    public List<Map<String, String>> getLikesArtist() {
+        return albumsRepo.findDistinctByArtistName();
     }
 }

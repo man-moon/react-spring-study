@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MusicController {
@@ -57,6 +58,11 @@ public class MusicController {
     @DeleteMapping(value = "/likes/{id}")
     public String musicDeleteByPath(@PathVariable String id) {
         return service.deleteFavorite(id);
+    }
+
+    @GetMapping(value = "/likesArtist")
+    public List<Map<String, String>> getLikesArtist(){
+        return service.getLikesArtist();
     }
 
 }
